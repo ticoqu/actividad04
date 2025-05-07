@@ -47,46 +47,47 @@ Parametrizar las máquinas virtuales mediante variables para mayor flexibilidad.
    sshkeys     = file("./keys/automatizacion.pub")
    ipconfig0   = "ip=${each.value.ip}/24,gw=192.168.1.1"
    disks {
-     virtio {
-       virtio0 {
-         disk {
-           storage = "vol1"
-           size    = "8G"
-         }
-       }
-     }
-     dynamic "virtio1" {
-       for_each = each.value.type == "worker" ? [1] : []
-       content {
-         disk {
-           storage = "vol1"
-           size    = "2G"
-         }
-       }
-     }
-     ide {
-       ide2 {
-         cloudinit {
-           storage = "vol1"
-         }
-       }
-     }
-   }
-   network {
-     model  = "virtio"
-     bridge = "vmbr0"
-     mtu    = 0
-   }
- }
+        virtio {
+          virtio0 {
+            disk {
+              storage = "vol1"
+              size    = "8G"
+            }
+          }
+        }
+        dynamic "virtio1" {
+          for_each = each.value.type == "worker" ? [1] : []
+          content {
+            disk {
+              storage = "vol1"
+              size    = "2G"
+            }
+          }
+        }
+        ide {
+          ide2 {
+            cloudinit {
+              storage = "vol1"
+            }
+          }
+        }
+      }
+      network {
+        model  = "virtio"
+        bridge = "vmbr0"
+        mtu    = 0
+      }
+    }
     ```
+    
 3. **Crear terraform.tfvars**
-```hcl
-cluster_psql = [
-  { name = "master-psql", ip = "192.168.1.20", target = "pve", type = "master" },
-  { name = "worker-psql1", ip = "192.168.1.21", target = "pve", type = "worker" },
-  { name = "worker-psql2", ip = "192.168.1.22", target = "pve", type = "worker" }
-]
-```
+   ```hcl
+   cluster_psql = [
+     { name = "master-psql", ip = "192.168.1.20", target = "pve", type = "master" },
+     { name = "worker-psql1", ip = "192.168.1.21", target = "pve", type = "worker" },
+     { name = "worker-psql2", ip = "192.168.1.22", target = "pve", type = "worker" }
+    ]
+   ```
 
 4. **Verificar tareas**
    ```bash
