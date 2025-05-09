@@ -88,13 +88,36 @@ Parametrizar las máquinas virtuales mediante variables para mayor flexibilidad.
      { name = "worker-psql2", ip = "192.168.1.22", target = "pve", type = "worker" }
     ]
    ```
+4. **Crear cloud-config.yaml**
+```hcl
+#cloud-config
+users:
+  - name: automatizacion
+    ssh-authorized-keys:
+      - ssh-rsa AAAAJo4bFP4x9ANmtScgFPdZv5nXQ== automatizacion
+    passwd: $6$9Wcf0
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: false
+    shell: /bin/bash
 
-4. **Verificar tareas**
+  - name: wcayoja
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAA
+    passwd: $6YQu7jpDKp.
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: false
+    shell: /bin/bash
+packages:
+  - htop
+  - rsyslog
+```
+
+5. **Verificar tareas**
    ```bash
    terraform plan
    ```
    
-5. **Ejecutar el despliegue**
+6. **Ejecutar el despliegue**
    ```bash
    terraform apply
    ```
